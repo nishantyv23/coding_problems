@@ -15,11 +15,8 @@ func (q *queue) dispatcher() {
 		)
 
 		/*
-			If the priority queue has a job,
-			enable the workCh case.
-
-			If the queue is empty, workOut is nil,
-			so that select case is disabled.
+			If the priority queue has a job,enable the workCh case.
+			If the queue is empty, workOut is nil,so that select case is disabled.
 		*/
 		if pq.Len() > 0 {
 			nextJob = pq.peekJob()
@@ -33,7 +30,6 @@ func (q *queue) dispatcher() {
 
 			/*
 				Shutdown means:
-
 				1. Stop accepting new jobs.
 				2. Dispatch everything already accepted.
 				3. Close workCh.
@@ -70,7 +66,7 @@ func (q *queue) dispatcher() {
 		// Send highest-priority job to a worker.
 		case workOut <- nextJob:
 
-			q.popJob()
+			pq.popJob()
 		}
 	}
 }

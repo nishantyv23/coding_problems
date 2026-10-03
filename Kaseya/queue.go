@@ -97,7 +97,7 @@ func NewQueue(
 	// Start workers.
 	q.workerWG.Add(workers)
 
-	for i := 0; i < workers; i++ {
+	for range workers {
 		go q.worker()
 	}
 
@@ -120,13 +120,9 @@ func (q *queue) Submit(job Job) error {
 
 	/*
 		Important:
-
 		We do NOT close submitCh during shutdown.
-
 		Instead, done is closed to signal shutdown.
-
 		This prevents:
-
 		    panic: send on closed channel
 	*/
 
