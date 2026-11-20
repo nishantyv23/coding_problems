@@ -1,20 +1,17 @@
 import java.util.*;
 
-public class InvertedIndex {
-
+public class InvertedIndex
+{
     // term -> documents containing the term
     private final Map<String, Set<String>> invertedIndex = new HashMap<>();
-
     // document -> unique words in the document
     private final Map<String, Set<String>> documentWords = new HashMap<>();
 
-    /**
-     * Inserts a document into the inverted index.
-     */
-    public void insert(String doc) {
-        if (doc == null || doc.isBlank()) {
+    //Inserts a document into the inverted index.
+    public void insert(String doc)
+    {
+        if (doc == null || doc.isBlank())
             return;
-        }
 
         String[] tokens = doc.toLowerCase().split("\\W+");
         Set<String> uniqueWords = new HashSet<>();
@@ -25,45 +22,35 @@ public class InvertedIndex {
             }
 
             uniqueWords.add(word);
-            invertedIndex
-                    .computeIfAbsent(word, k -> new HashSet<>())
-                    .add(doc);
+            invertedIndex.computeIfAbsent(word, k -> new HashSet<>()).add(doc);
         }
 
         documentWords.put(doc, uniqueWords);
     }
 
-    /**
-     * Returns all documents containing the given term.
-     */
-    public Set<String> search(String term) {
-        if (term == null) {
+    //Returns all documents containing the given term.
+    public Set<String> search(String term)
+    {
+        if (term == null)
             return Collections.emptySet();
-        }
 
-        return invertedIndex.getOrDefault(
-                term.toLowerCase(),
-                Collections.emptySet()
-        );
+        return invertedIndex.getOrDefault(term.toLowerCase(),Collections.emptySet());
     }
 
-    /**
-     * Deletes a document from the inverted index.
-     */
-    public void delete(String doc) {
-
+    //Deletes a document from the inverted index.
+    public void delete(String doc)
+    {
         Set<String> words = documentWords.get(doc);
 
-        if (words == null) {
+        if (words == null)
             return; // document not found
-        }
 
-        for (String word : words) {
+        for (String word : words)
+        {
             Set<String> docs = invertedIndex.get(word);
-
-            if (docs != null) {
+            if (docs != null)
+            {
                 docs.remove(doc);
-
                 // Remove the term if no documents contain it anymore
                 if (docs.isEmpty()) {
                     invertedIndex.remove(word);
@@ -74,9 +61,7 @@ public class InvertedIndex {
         documentWords.remove(doc);
     }
 
-    /**
-     * Returns documents containing both terms.
-     */
+    // Returns documents containing both terms.
     public Set<String> andSearch(String term1, String term2) {
 
         Set<String> docs1 = invertedIndex.getOrDefault(
